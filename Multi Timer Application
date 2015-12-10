@@ -1,0 +1,494 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace TimerWeek2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        
+        int i = 1;
+        public int[] input = new int[1000];
+        public int[] temp = new int[1000];
+        public int[] hrs = new int[1000];
+        public int[] min = new int[1000];
+        public int[] sec = new int[1000];
+        
+           
+        SortedList<String, Timer> myTimers = new SortedList<string, Timer>();
+        SortedList<String, Timer> upTimers = new SortedList<string, Timer>();
+
+        private void Add_Click(object sender, EventArgs e)
+        {
+            
+            Panel homepanel = new Panel();
+            homepanel.Name = "pnlHome" + i;
+            homepanel.Size = new Size(440, 160);
+            homepanel.AutoScroll = true;
+            homepanel.BackColor = Color.FromArgb(192, 192, 192);
+            homepanel.BorderStyle = BorderStyle.FixedSingle;
+
+            Label hourlabel = new Label();
+            hourlabel.Name = "lblHour" + i;
+            hourlabel.AutoSize = false;
+            hourlabel.Location = new Point(30, 60);
+            hourlabel.Size = new Size(70,70);
+            hourlabel.Font = new Font("Segoe UI", 30);
+            hourlabel.ForeColor = Color.Black;
+            hourlabel.Text = "00";
+
+            Label label1 = new Label();
+            label1.Text = ":";
+            label1.Font = new Font("Segoe UI", 30);
+            label1.ForeColor = Color.Black;
+            label1.Location = new Point(90, 55);  
+            label1.Size = new Size(30, 60);
+
+            Label minutelabel = new Label();
+            minutelabel.Name = "lblMinute" + i;
+            minutelabel.AutoSize = false;
+            minutelabel.Location = new Point(120, 60);
+            minutelabel.Size = new Size(70, 70);
+            minutelabel.Font = new Font("Segoe UI", 30);
+            minutelabel.ForeColor = Color.Black;
+            minutelabel.Text = "00";
+
+            Label label2 = new Label();
+            label2.Text = ":";
+            label2.Font = new Font("Segoe UI", 30);
+            label2.ForeColor = Color.Black;
+            label2.Location = new Point(180, 55);
+            label2.Size = new Size(30, 60);
+
+
+            Label secondlabel = new Label();
+            secondlabel.Name = "lblSecond" + i;
+            secondlabel.AutoSize = false;
+            secondlabel.Location = new Point(210, 60);
+            secondlabel.Size = new Size(70, 70);
+            secondlabel.Font = new Font("Segoe UI", 30);
+            secondlabel.ForeColor = Color.Black;
+            secondlabel.Text = "00";
+
+            Label label3 = new Label();
+            label3.Text = "Time (Seconds)";
+            label3.Location = new Point(280, 10);
+            label3.Size = new Size(150, 25);
+            label3.Font = new Font("Segoe UI", 10);
+
+            TextBox textbox1 = new TextBox();
+            textbox1.Name = "txtInput" + i;
+            textbox1.Location = new Point(280, 30);
+            textbox1.Size = new Size(120, 30);
+            textbox1.Font = new Font("Segoe UI", 10);
+
+
+            Button start = new Button();
+            start.Name = "btnStart" + i;
+            start.Text = "Start";
+            start.UseVisualStyleBackColor = true;
+            start.Location = new Point(280, 60);
+            start.Size = new Size(80, 25);
+            start.Click += Start_Click;
+
+
+            Button pause = new Button();
+            pause.Name = "btnPause" + i;
+            pause.Text = "Pause";
+            pause.Enabled = false;
+            pause.UseVisualStyleBackColor = true;
+            pause.Location = new Point(280, 90);
+            pause.Size = new Size(80, 25);
+            pause.Click += Pause_Click;
+
+
+            Button delete = new Button();
+            delete.Name = "btnDelete" + i;
+            delete.Text = "Delete";
+            delete.UseVisualStyleBackColor = true;
+            delete.Location = new Point(280, 120);
+            delete.Size = new Size(80, 25);
+            delete.Click += Delete_Click;
+
+            Label title = new Label();
+            title.Text = "Timer"+ i;
+            title.Location = new Point(10, 5);
+            title.Size = new Size(150, 40);
+            title.Font = new Font("Segoe UI", 25);
+
+            Timer myTimer = new Timer();
+            myTimer.Tag = i;
+            myTimer.Enabled = false;
+            myTimer.Interval = 1000;
+            myTimer.Tick += Mytimer_Tick;
+            myTimers.Add("tmrOperation" + i, myTimer);
+
+            Timer upTimer = new Timer();
+            upTimer.Tag = i;
+            upTimer.Enabled = false;
+            upTimer.Interval = 1000;
+            upTimer.Tick += UpTimer_Tick;
+            upTimers.Add("tmrOperation" + i, upTimer);
+
+
+            Label done = new Label();
+            done.Name = "lblDone" + i;
+            done.Text = "Done!";
+            done.Font = new Font("Segoe UI", 14, FontStyle.Bold);
+            done.Size = new Size(100,20);
+            done.Location = new Point(170, 130);
+            done.Visible = false;
+            done.ForeColor = Color.Red;
+
+            Label minus = new Label();
+            minus.Name = "minus" + i;
+            minus.Text = "---";
+            minus.Font = new Font("Segoe UI", 10 ,FontStyle.Bold);
+            minus.Location = new Point(2, 80);
+            minus.Visible = false;
+            minus.ForeColor = Color.Red;
+
+            homepanel.Controls.Add(hourlabel);
+            homepanel.Controls.Add(minutelabel);
+            homepanel.Controls.Add(label1);
+            homepanel.Controls.Add(label2);
+            homepanel.Controls.Add(secondlabel);
+            homepanel.Controls.Add(start);
+            homepanel.Controls.Add(pause);
+            homepanel.Controls.Add(delete);
+            homepanel.Controls.Add(textbox1);
+            homepanel.Controls.Add(label3);
+            homepanel.Controls.Add(title);
+            homepanel.Controls.Add(done);
+            homepanel.Controls.Add(minus);
+            
+            flowLayoutPanel1.Controls.Add(homepanel);
+
+            i++;
+            
+        }
+
+        private void UpTimer_Tick(object sender, EventArgs e)
+        {
+            Timer upTimer = (Timer)sender;
+            int controlNumber = 0;
+            controlNumber = Convert.ToInt32(upTimer.Tag.ToString());
+            int i = controlNumber;
+            Button pause = (Button)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["btnPause" + controlNumber];
+            Button start = (Button)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["btnStart" + controlNumber];
+            Label hour = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblHour" + controlNumber];
+            Label minute = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblMinute" + controlNumber];
+            Label second = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblSecond" + controlNumber];
+            Label minus = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["minus" + controlNumber];
+            Label done = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblDone" + controlNumber];
+            minus.Visible = true;
+            done.Visible = true;
+            hour.ForeColor = Color.Red;
+            minute.ForeColor = Color.Red;
+            second.ForeColor = Color.Red;
+
+            start.Enabled = true;
+            pause.Enabled = true;
+
+                if (sec[i] == 60)
+                {
+                    sec[i] = 0;
+                    if (min[i] == 60)
+                    {
+                        min[i] = 0;
+                        if (hrs[i] >= 0)
+                        {
+                            hrs[i] += 1;
+                        }
+                    }
+                    else
+                        min[i] += 1;
+                }
+                else
+                    sec[i] += 1;
+
+                hour.Text = hrs[i].ToString("D2");
+                minute.Text = min[i].ToString("D2");
+                second.Text = sec[i].ToString("D2");
+            
+
+        }
+
+        private void Mytimer_Tick(object sender, EventArgs e)
+        {
+            Timer myTimer = (Timer)sender;
+            int controlNumber = 0;
+            controlNumber = Convert.ToInt32(myTimer.Tag.ToString());
+            int i = controlNumber;
+
+            Timer upTimer = upTimers["tmrOperation" + controlNumber];
+            TextBox myInput = (TextBox)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["txtInput" + controlNumber];
+            Button start = (Button)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["btnStart" + controlNumber];
+            Label hour = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblHour" + controlNumber];
+            Label minute = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblMinute" + controlNumber];
+            Label second = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblSecond" + controlNumber];
+            Button pause = (Button)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["btnPause" + controlNumber];
+            Label timeup = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblDone" + controlNumber];
+
+            if ((hrs[i] == 0) && (min[i] == 0) && (sec[i] == 0))
+            {
+                timeup.Enabled = true;
+                myTimer.Enabled = false;
+
+                start.Text = "Restart";
+                pause.Text = "Pause";
+
+                pause.Enabled = true;
+                start.Enabled = true;
+
+                myInput.Enabled = false;
+
+                upTimer.Enabled = true;
+                
+            }
+
+            else
+            {
+                if (sec[i] < 1)
+                {
+                    sec[i] = 59;
+                    if (min[i] == 0)
+                    {
+                        min[i] = 59;
+                        if (hrs[i] != 0)
+                        {
+                            hrs[i] -= 1;
+                        }
+                    }
+                    else
+                        min[i] -= 1;
+                }
+                else
+                    sec[i] -= 1;
+                hour.Text = hrs[i].ToString("D2");
+                minute.Text = min[i].ToString("D2");
+                second.Text = sec[i].ToString("D2");
+            }
+        }
+        
+
+        private void Delete_Click(object sender, EventArgs e)
+        {
+            Button myButton3 = (Button)sender;
+            int controlNumber = 0;
+            controlNumber = Convert.ToInt32(myButton3.Name.Replace("btnDelete", ""));
+            
+            Timer upTimer = upTimers["tmrOperation" + controlNumber];
+            Timer myTimer = myTimers["tmrOperation" + controlNumber];
+            upTimer.Stop();
+            upTimer.Enabled = false;
+            upTimer.Dispose();
+            myTimer.Stop();
+            myTimer.Enabled = false;
+            myTimer.Dispose();
+            myTimers.Remove("tmrOperation" + controlNumber); flowLayoutPanel1.Controls.RemoveByKey("pnlHome" + controlNumber);
+            
+
+
+        }
+
+        private void Pause_Click(object sender, EventArgs e)
+        {
+            Button myButton2 = (Button)sender;
+            int controlNumber = 0;
+            controlNumber = Convert.ToInt32(myButton2.Name.Replace("btnPause", ""));
+            Timer myTimer = myTimers["tmrOperation" + controlNumber];
+            Button start = (Button)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["btnStart" + controlNumber];
+            Timer upTimer = upTimers["tmrOperation" + controlNumber];
+            Label minus = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["minus" + controlNumber];
+            start.Enabled = true;
+
+            if (myButton2.Text == "Pause")
+            {
+                myButton2.Text = "Resume";
+                myButton2.Enabled = true;
+
+                myTimer.Enabled = false;
+                upTimer.Enabled = false;
+                
+            }
+            else if(myButton2.Text == "Resume")
+            {
+                myButton2.Text = "Pause";
+                
+                if (minus.Visible == false)
+                    myTimer.Enabled = true;
+                else
+                    upTimer.Enabled = true;
+                
+
+                myButton2.Enabled = true;
+                
+
+            }
+
+
+
+        }
+
+        private void Start_Click(object sender, EventArgs e)
+        {
+            
+            Button myButton1 = (Button)sender;
+          
+            int controlNumber = 0;
+            controlNumber = Convert.ToInt32(myButton1.Name.Replace("btnStart", ""));
+            int i = controlNumber;
+            Timer myTimer = myTimers["tmrOperation" + controlNumber];
+            Timer upTimer = upTimers["tmrOperation" + controlNumber];
+            TextBox myInput = (TextBox)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["txtInput" + controlNumber];
+            Label hour = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblHour" + controlNumber];
+            Label minute = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblMinute" + controlNumber];
+            Label second = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblSecond" + controlNumber];
+            Button pause = (Button)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["btnPause" + controlNumber];
+            Label minus = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["minus" + controlNumber];
+            Label done = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblDone" + controlNumber];
+            
+
+            if (myButton1.Text == "Start")
+            {
+                if (myInput.Text != "")
+                {
+                    input[i] = Convert.ToInt32(myInput.Text);
+                    if(input[i] >= 0)
+                    {
+                        myButton1.Text = "Restart";
+                        pause.Enabled = true;
+                        myTimer.Enabled = true;
+                        myInput.Enabled = false;
+                        try
+                        {
+                            temp[i] = input[i] / 60;
+                            if (temp[i] < 60)
+                            {
+                                hrs[i] = 0;
+                                min[i] = temp[i];
+                                sec[i] = input[i] % 60;
+                            }
+                            else if (temp[i] >= 60)
+                            {
+                                hrs[i] = temp[i] / 60;
+                                min[i] = temp[i] % 60;
+                                sec[i] = input[i] % 60;
+
+                            }
+
+                            hour.Text = hrs[i].ToString("D2");
+                            minute.Text = min[i].ToString("D2");
+                            second.Text = sec[i].ToString("D2");
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Wrong input");
+                        myInput.Text = "";
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Enter Input");
+                }
+
+            }
+            else if(myButton1.Text == "Restart")
+            {
+                myButton1.Text = "Start";
+                myButton1.Enabled = true;
+                myTimer.Enabled = false;
+                upTimer.Enabled = false;
+                minus.Visible = false;
+                done.Visible = false;
+                hour.ForeColor = Color.Black;
+                minute.ForeColor = Color.Black;
+                second.ForeColor = Color.Black;
+
+                myInput.Clear();
+                myInput.Enabled = true;
+
+                pause.Enabled = false;
+                pause.Text = "Pause";
+
+                hour.Text = "00";
+                minute.Text = "00";
+                second.Text = "00";
+
+                hrs[i] = 0;
+                min[i] = 0;
+                sec[i] = 0;
+
+            }
+
+                }
+            
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void Reset_Click(object sender, EventArgs e)
+        {
+            int controlNumber = 0;
+            
+            foreach (Control childControl in flowLayoutPanel1.Controls)
+            {
+                controlNumber = Convert.ToInt32(childControl.Name.Replace("pnlHome", ""));
+                Label hour = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblHour" + controlNumber];
+                Label minute = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblMinute" + controlNumber];
+                Label second = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblSecond" + controlNumber];
+                Button pause = (Button)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["btnPause" + controlNumber];
+                Button start = (Button)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["btnStart" + controlNumber];
+                Label minus = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["minus" + controlNumber];
+                Label done = (Label)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["lblDone" + controlNumber];
+                Timer myTimer = myTimers["tmrOperation" + controlNumber];
+                Timer upTimer = upTimers["tmrOperation" + controlNumber];
+                TextBox myInput = (TextBox)flowLayoutPanel1.Controls["pnlHome" + controlNumber].Controls["txtInput" + controlNumber];
+
+                myTimer.Enabled = false;
+                upTimer.Enabled = false;
+
+                start.Enabled = true;
+                pause.Enabled = false;
+
+                start.Text = "Start";
+                pause.Text = "Pause";
+
+                hour.Text = "00";
+                minute.Text = "00";
+                second.Text = "00";
+
+                hour.ForeColor = Color.Black;
+                second.ForeColor = Color.Black;
+                minute.ForeColor = Color.Black;
+
+                minus.Visible = false;
+                done.Visible = false;
+                myInput.Clear();
+                myInput.Enabled = true;
+                
+            }
+        }
+    }
+}
